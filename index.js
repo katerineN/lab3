@@ -1,9 +1,10 @@
 import { Cube } from './cube.js';
+import cubeFragmentShader from "./frag_shader.js";
+import cubeVertexShader from "./vert_shader.js";
 
 
 //Повороты
 const ROTATION_SPEED = 0.015;
-const projectionMatrix = mat4.create();
 let curRotations = [0.0, 0.0, 0.0];
 let currentSpeed = 0, currentMode = 1;
 
@@ -99,71 +100,6 @@ float dampLight(int dampingFunction, float light) {
     return new_light;
 }`
 
-var cubeVertexShader = `precision mediump float;
-attribute vec4 aVertexPosition;
-attribute vec4 aVertexColor;
-attribute vec3 aNormal;
-
-uniform mat4 uModelViewMatrix;
-uniform mat4 uProjectionMatrix;
-
-varying vec4 vPosition;
-varying vec4 vColor;
-varying vec3 vNormal;
-
-uniform float uLightPower;
-uniform vec3 uLightDirection;
-uniform lowp int uDampingFunction;
-uniform lowp int uShading;
-uniform lowp int uLightModel;
-uniform float uLightShininess;
-${shaderFunctions}
-void main(void) {
-    vec3 normal = normalize(mat3(uModelViewMatrix) * aNormal);
-    vec3 position = vec3(uModelViewMatrix * aVertexPosition);
-    vec3 lightDirection = normalize(uLightDirection - position);
-
-    int current = 1;
-    float light = evaluateLighting(
-        uShading, current, uLightModel, normal, aVertexPosition,
-        lightDirection, position, uLightPower, uLightShininess);
-    light = dampLight(uDampingFunction, light);
-
-    gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-    vColor = aVertexColor;
-    vColor.rgb *= light;
-    vPosition = aVertexPosition;
-    vNormal = normal;
-}`
-
-var cubeFragmentShader = `precision mediump float;
-uniform mat4 uModelViewMatrix;
-
-varying vec4 vPosition;
-varying vec4 vColor;
-varying vec3 vNormal;
-
-uniform float uLightPower;
-uniform vec3 uLightDirection;
-uniform lowp int uDampingFunction;
-uniform lowp int uShading;
-uniform lowp int uLightModel;
-uniform float uLightShininess;
-${shaderFunctions}
-void main(void) {
-    vec3 positionEye3 = vec3(uModelViewMatrix * vPosition);
-    vec3 lightDirection = normalize(uLightDirection - positionEye3);
-
-    int current = 0;
-
-    float light = evaluateLighting(
-        uShading, current, uLightModel, vNormal, vPosition,
-        lightDirection, positionEye3, uLightPower, uLightShininess);
-    light = dampLight(uDampingFunction, light);
-
-    gl_FragColor = vColor;
-    gl_FragColor.rgb *= light;
-}`
 
 
 //Сцена
