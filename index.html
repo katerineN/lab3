@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab 3&4</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"
+            integrity="sha512-zhHQR0/H5SEBL3Wn6yYSaTTZej12z0hVZKOv3TwCUXT1z5qeqGcXJLLrbERYRScEDDpYIJhPC1fk31gqR783iQ=="
+            crossorigin="anonymous" defer></script>
+    <script src="index.js" defer></script>
+    <style>
+
+        canvas {
+            border: 2px solid black;
+            background-color: black;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container d-flex justify-content-evenly align-items-center">
+    <div class="w-25">
+
+        <label for="lightPower" class="form-label" style="font-size: 22px;">Мощность источника</label>
+        <input onchange="update()" type="range" min="0" max="2" step="0.05" class="form-range" id="lightPower">
+        <br /><br />
+
+        <label for="lightPower" class="form-label" style="font-size: 22px;">Затухание</label> <br />
+        <select class="dampingFunction" onchange="update()" aria-label="Функция затухания" style="font-size: 18px;">
+            <option selected value="0">Линейное</option>
+            <option value="1">Квадратичное</option>
+        </select>
+        <br /><br />
+
+        <label for="lightPower" class="form-label" style="font-size: 22px;">Шейдинг</label> <br />
+        <select class="shading" onchange="update()" aria-label="Шейдинг" style="font-size: 18px;">
+            <option selected value="0">Фонг</option>
+            <option value="1">Гуро</option>
+        </select>
+        <br /><br />
+
+        <label for="lightPower" class="form-label" style="font-size: 22px;">Модель освещения</label> <br />
+        <select class="lightModel" onchange="update()" aria-label="Шейдинг" style="font-size: 18px;">
+            <option selected value="0">Ламберт</option>
+            <option value="1">Фонг</option>
+            <option value="2">Сел(Тун)-шейдинг</option>
+        </select>
+        <br /><br />
+        <div>
+            <label style="display: flex; align-items: center;" >
+                <input type="radio" value="0" name="mode" checked style="margin-right: 10px;">
+                <span style="font-size: 22px;">1) поворот каждого кубика вокруг оси, проходящей через его центр и параллельной оси Y</span>
+            </label>
+            <label style="display: flex; align-items: center;">
+                <input type="radio" value="1" name="mode" style="margin-right: 10px; " >
+                <span style="font-size: 22px;">2) поворот всего пьедестала вокруг оси, проходящей через его центр и параллельной оси Y</span>
+            </label>
+            <label style="display: flex; align-items: center;">
+                <input type="radio" value="2" name="mode" style="margin-right: 10px;">
+                <span style="font-size: 22px;">3) поворот всего пьедестала вокруг оси Y в глобальной системе координат, т.е. проходящей через центр сцены</span>
+            </label>
+        </div>
+
+    </div>
+    <div>
+        <canvas id="glcanvas" width="1280" height="720"></canvas>
+    </div>
+</div>
+</body>
+</html>
