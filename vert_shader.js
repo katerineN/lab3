@@ -1,3 +1,4 @@
+import shaderFunctions from "./shaderFunctions.js";
 var cubeVertexShader = `precision mediump float;
 attribute vec4 aVertexPosition;
 attribute vec4 aVertexColor;
@@ -34,3 +35,5 @@ void main(void) {
     vPosition = aVertexPosition;
     vNormal = normal;
 }`
+
+export default cubeVertexShader;

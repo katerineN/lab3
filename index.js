@@ -6,7 +6,7 @@ import cubeVertexShader from "./vert_shader.js";
 //Повороты
 const ROTATION_SPEED = 0.015;
 let curRotations = [0.0, 0.0, 0.0];
-let currentSpeed = 0, currentMode = 1;
+let currentSpeed = 0, currentMode = 0;
 
 window.addEventListener('keydown', event => {
     if (event.key === 'ArrowLeft')
@@ -35,72 +35,6 @@ const rotatePedestalAroundSelfCenter = (obj, Matrix, rad) => {
 const rotatePedestalAroundWorldCenter = (obj, Matrix, rad) => {
     obj.rotateAround(Matrix, rad, [0, 0, 0]);
 }
-
-
-
-const shaderFunctions = `
-float positive_dot(vec3 left, vec3 right) {
-    return max(dot(left, right), 0.0);
-}
-        
-float lambert(vec3 normal, vec3 lightPosition, float power) {
-    return max(dot(normal, normalize(lightPosition)), 0.0) * power;
-}
-        
-float phong(vec3 normal, vec3 lightDir, vec3 viewPosition, float power, float shininess) {
-    float diffuseLightDot = positive_dot(normal, lightDir);
-    vec3 reflectionVector = normalize(reflect(-lightDir, normal));
-    float specularLightDot = positive_dot(reflectionVector, -normalize(viewPosition));
-    float specularLightParam = pow(specularLightDot, shininess);
-    return (diffuseLightDot + specularLightParam) * power;
-}
-        
-float selShaded(vec3 normal, vec3 lightPosition, float power) {
-    float coef = lambert(normal, lightPosition, power);
-    if (coef >= 0.95) {
-        coef = 1.0;
-    } else if (coef >= 0.5) {
-        coef = 0.7;
-    } else if (coef >= 0.2) {
-        coef = 0.4;
-    } else {
-        coef = 0.1;
-    }
-
-    return coef;
-}
-        
-float evaluateLighting(int shading, int current, int lightModel, vec3 normal, vec4 vertex,
-                        vec3 lightDir, vec3 viewPosition, float power, float shininess) 
-{
-    float light = 1.0;
-    if (shading == current) 
-{
-        if (lightModel == 0) {
-            light = lambert(normal, lightDir, power);   
-        } else if (lightModel == 1) {
-            light = phong(normal, lightDir, viewPosition, power, shininess);
-        } else if (lightModel == 2){
-            light = selShaded(normal, lightDir, power);
-        }
-    }
-    return light;
-}
-        
-float dampLight(int dampingFunction, float light) {
-    float new_light = light;
-        
-    if (dampingFunction == 0) {
-        new_light = light;   
-    }
-    else if (dampingFunction == 1) {
-        new_light = light*light;
-    }
-            
-    return new_light;
-}`
-
-
 
 //Сцена
 class Scene {

@@ -1,3 +1,5 @@
+import shaderFunctions from "./shaderFunctions.js";
+
 var cubeFragmentShader = `precision mediump float;
 uniform mat4 uModelViewMatrix;
 
@@ -26,3 +28,5 @@ void main(void) {
     gl_FragColor = vColor;
     gl_FragColor.rgb *= light;
 }`
+
+export default cubeFragmentShader;
